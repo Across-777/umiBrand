@@ -1,0 +1,31 @@
+
+/* search component css */
+.search_component{
+    margin: 10px;
+}
+.search_info{
+    /* display:flex*/
+     display:inline-block;
+     width: 80%;
+    }
+.search_button{
+    display:inline-block;
+}
+.search_button button{
+    margin:0 10px;
+}
+.search_input{
+    display:inline-block;
+    margin:0 20px;
+}
+.search_select{
+    display:inline-block;
+    margin:0 20px;
+}
+
+/* table component css */
+.table_txt{
+    background: royalblue;
+    padding: 5px;
+    margin-left: 2px;
+}
