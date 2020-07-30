@@ -1,6 +1,7 @@
 import { Layout, Menu, Breadcrumb } from 'antd';
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 import { Link } from 'umi';
+import SiderLayout from '../layouts/SiderLayout'
 
 
 export default (props) => {
@@ -9,7 +10,7 @@ export default (props) => {
     return (
         <Layout>
             <Header className="header">
-                <h1 className="head_txt">五星电器</h1>
+                <h1 className="head_txt"><Link to="/">五星电器</Link></h1>
                 {/* <div className="logo" /> */}
                 {/* <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
                     <Menu.Item key="1">nav 1</Menu.Item>
@@ -19,7 +20,8 @@ export default (props) => {
             </Header>
 
             <Layout>
-                <Sider width={200} className="site-layout-background">
+                <SiderLayout />
+{/*             <Sider width={200} className="site-layout-background">
                     <Menu
                         mode="inline"
                         defaultSelectedKeys={['1']}
@@ -45,7 +47,7 @@ export default (props) => {
                             <Menu.Item key="12">option12</Menu.Item>
                         </SubMenu>
                     </Menu>
-                </Sider>
+                </Sider> */}
                 <Layout style={{ padding: '0 16px 16px' }}>
                     <Breadcrumb style={{ margin: '10px 0' }}>
                         <Breadcrumb.Item>京东商品管理</Breadcrumb.Item>
@@ -54,7 +56,7 @@ export default (props) => {
                     <Content
                         className="site-layout-background"
                         style={{
-                            padding: 10,
+                            // padding: 10,
                             margin: 0,
                             minHeight: 280,
                         }}
