@@ -1,4 +1,7 @@
-
+/* layout css */
+.head_txt{
+    color: rgb(21, 136, 182);
+}
 /* search component css */
 .search_component{
     margin: 10px;

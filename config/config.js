@@ -2,11 +2,11 @@ export default {
   routes: [
     {
       path: '/',
-      component: '@/components/MainLayout',
+      component: '@/layouts/BasicLayout',
       routes: [
-        { path: '/option', component: '@/components/Main' },
-        { path: 'option2', component: '@/components/option2' },
-        { path: '/option3', component: '@/components/option3' },
+        { path: '/option', component: '@/pages/Brand/components/option' },
+        { path: '/option2', component: '@/pages/Brand/components/option2' },
+        { path: '/option3', component: '@/pages/Brand/components/option3' },
       ],
     },
   ],

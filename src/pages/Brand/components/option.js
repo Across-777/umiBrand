@@ -1,7 +1,6 @@
 import React from 'react'
-import MainLayout from './MainLayout'
-import SearchComponent from './SearchComponent'
-import TableComponent from './TableComponent'
+import SearchComponent from '../components/SearchComponent'
+import TableComponent from '../components/TableComponent'
 
 export default (props) => {
     return (
