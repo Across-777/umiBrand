@@ -1,5 +1,9 @@
+import BreadContent from '@/components/BreadContent/index';
 export default ()=>{
     return(
-        <div>This is option33333!</div>
+        <BreadContent>
+            <div>This is option33333!</div>
+        </BreadContent>
+        
     )
 }
