@@ -8,6 +8,7 @@
 }
 .search_tip{
     background: grey;
+    margin:0 0 10px 0;
 }
 .search_info{
     /* display:flex*/
@@ -34,4 +35,8 @@
     background: rgb(21, 136, 182);
     /* padding: 5px; */
     /* margin-left: 2px; */
+}
+/* autd css */
+.ant-btn {
+    margin-left: 12px;
 }

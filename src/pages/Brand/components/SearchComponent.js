@@ -1,33 +1,61 @@
-import React from 'react'
+import React from 'react';
+import { Row, Col, Form, Select, Button } from 'antd';
 
-export default (props) => {
+export default props => {
+  const { dispatch } = props;
 
-    return (
-        <div className='search_component'>
-            <div className='search_tip'>
-                <h3>查询条件</h3>
-            </div>
-            <div className='search_div'>
-                <div className='search_info'>
-                    <div className='search_input'>
-                        品牌名称：<input type='txet'></input>
-                    </div>
-                    <div className='search_select'>
-                        状态：
-                        <select>
-                            <option value="">请选择</option>
-                            <option value="">待确认</option>
-                            <option value="">成功</option>
-                            <option value="">失败</option>
-                            <option value="">取消</option>
-                        </select>
-                    </div>
-                </div>
-                <div className='search_button'>
-                    <button>查询</button>
-                    <button>重置</button>
-                </div>
-            </div>
-        </div>
-    )
-}
+  const [form] = Form.useForm();
+  const formFinish = values => {
+    console.log('Success:', values);
+    dispatch({
+      type: 'brand/getBrandInfoByInfo',
+      payload: { submitInfo: values },
+    });
+  };
+
+  const onReset = () => {
+    form.resetFields();
+  };
+
+  return (
+    <div>
+      <Row className="search_tip">
+        <Col>查询条件</Col>
+      </Row>
+      <Form form={form} onFinish={formFinish}>
+        <Row>
+          <Col span={6}>
+            <Form.Item label="品牌名称" name="brandName">
+              <input />
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item label="状态" name="status">
+              <Select
+                placeholder="请选择"
+                // onChange={this.onGenderChange}
+                allowClear
+              >
+                <Select.Option value="1">待确认</Select.Option>
+                <Select.Option value="2">成功</Select.Option>
+                <Select.Option value="3">失败</Select.Option>
+                <Select.Option value="4">取消</Select.Option>
+              </Select>
+            </Form.Item>
+          </Col>
+
+          <Col span={12}>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                查询
+              </Button>
+              <Button htmlType="button" onClick={onReset}>
+                重置
+              </Button>
+            </Form.Item>
+          </Col>
+        </Row>
+      </Form>
+    </div>
+  );
+};
