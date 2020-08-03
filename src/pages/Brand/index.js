@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
 import BreadContent from '../../components/BreadContent';
-import SearchComponent from './components/SearchComponent';
-import TableComponent from './components/TableComponent';
 import { Row, Col, Form, Select, Button, Table, Pagination } from 'antd';
 const columns = [
   {
@@ -35,8 +33,8 @@ const columns = [
 const submitInfo = {
   brandName: undefined,
   status: undefined,
-  // page:1,
-  // size:10,
+  page:1,
+  size:10,
 };
 const Brand = props => {
   const { data, dispatch } = props;
@@ -47,6 +45,8 @@ const Brand = props => {
   const formFinish = values => {
     // console.log('Success:', values);
     // submitInfo.page=1;
+    submitInfo.page=1;
+    submitInfo.size=10;
     submitInfo.brandName = values.brandName;
     submitInfo.status = values.status;
     dispatch({
@@ -61,10 +61,10 @@ const Brand = props => {
 
   // 切换页码事件
   const onChange = (page, pageSize) => {
-    // submitInfo.page=page;
-    // submitInfo.size=pageSize;
+    submitInfo.page=page;
+    submitInfo.size=pageSize;
     console.log('page onchange');
-    // dispatch({ type: 'brand/getBrandInfo', payload: { submitInfo: submitInfo } })
+    dispatch({ type: 'brand/getBrandInfo', payload: { submitInfo: submitInfo } })
   };
   return (
     <BreadContent>
@@ -110,7 +110,10 @@ const Brand = props => {
             rowKey="id"
             pagination={{
               defaultCurrent: 1,
-              // total: `${data.data.total}`,
+              // pageSizeOptions:[10, 20, 50, 100],
+              total: `${data.data.total}`,
+              pageSize:`${data.data.size}`,
+              current:`${data.data.page}`,
               onChange: onChange,
             }}
           />
@@ -121,102 +124,3 @@ const Brand = props => {
 };
 
 export default connect(({ brand }) => brand)(Brand);
-
-// import React from 'react'
-// import { Table} from 'antd';
-// import BreadContent from '@/components/BreadContent'
-
-// const columns = [
-//     {
-//         title: '品牌名称',
-//         dataIndex: 'name',
-//         key: 'name',
-//     },
-//     {
-//         title: '状态',
-//         dataIndex: 'age',
-//         key: 'age',
-//     },
-//     {
-//         title: '操作',
-//         dataIndex: 'address',
-//         key: 'address',
-//     },
-//     {
-//         title: '操作人',
-//         dataIndex: 'address',
-//         key: 'address',
-//     },
-//     {
-//         title: '操作时间',
-//         dataIndex: 'address',
-//         key: 'address',
-//     },
-
-// ];
-
-// const data = [
-//     {
-//         key: '1',
-//         name: 'John Brown',
-//         age: 32,
-//         address: 'New York No. 1 Lake Park',
-//         tags: ['nice', 'developer'],
-//     },
-//     {
-//         key: '2',
-//         name: 'Jim Green',
-//         age: 42,
-//         address: 'London No. 1 Lake Park',
-//         tags: ['loser'],
-//     },
-//     {
-//         key: '3',
-//         name: 'Joe Black',
-//         age: 32,
-//         address: 'Sidney No. 1 Lake Park',
-//         tags: ['cool', 'teacher'],
-//     },
-// ];
-
-// export default (props) => {
-//     return (
-//         <BreadContent>
-//             <div className='search_component'>
-//                 <div className='search_tip'>
-//                     <h3>查询条件</h3>
-//                 </div>
-//                 <div className='search_div'>
-//                     <div className='search_info'>
-//                         <div className='search_input'>
-//                             品牌名称：<input type='txet'></input>
-//                         </div>
-//                         <div className='search_select'>
-//                             状态：
-//                         <select>
-//                                 <option value="">请选择</option>
-//                                 <option value="">待确认</option>
-//                                 <option value="">成功</option>
-//                                 <option value="">失败</option>
-//                                 <option value="">取消</option>
-//                             </select>
-//                         </div>
-//                     </div>
-//                     <div className='search_button'>
-//                         <button>查询</button>
-//                         <button>重置</button>
-//                     </div>
-//                 </div>
-//             </div>
-//             <div>
-//                 <div className='table_txt'>
-//                     品牌确认
-//                 </div>
-//                 <div>
-//                     <Table columns={columns} dataSource={data} />
-//                 </div>
-//             </div>
-//         </BreadContent>
-
-//     )
-// }
