@@ -1,13 +1,9 @@
 import { Layout, Menu, Breadcrumb } from 'antd';
-import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
-import { Link } from 'umi';
-import SiderLayout from '../layouts/SiderLayout'
 import MenuLayout from '../layouts/MenuLayout'
 import HeaderLayout from '../layouts/HeaderLayout'
 import BreadContext from '@/components/BreadContext';
 
-const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
+const { Content, Sider } = Layout;
 export default class BasicLayout extends React.Component {
 
     constructor(props) {

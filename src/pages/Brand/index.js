@@ -1,9 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import BreadContent from '../../components/BreadContent';
+import BrandModal from './components/BrandModal';
 import {
-  Row, Col, Form, Select, Button, Table, Pagination,
-  Modal, Popconfirm, Space, Input, DatePicker
+  Row,
+  Col,
+  Form,
+  Select,
+  Button,
+  Table,
+  Pagination,
+  Modal,
+  Popconfirm,
+  Space,
+  Input,
+  DatePicker,
 } from 'antd';
 
 // 提交信息结构
@@ -13,15 +24,10 @@ const submitInfo = {
   page: 1,
   size: 10,
 };
-// madal 样式
-const layout = {
-  labelCol: { span: 4 },
-  wrapperCol: { span: 20 },
-};
 
 const Brand = props => {
   const { data, dispatch } = props;
-  // console.log('index props',props);
+  // 表格列 数据
   const columns = [
     {
       title: '品牌名称',
@@ -48,43 +54,69 @@ const Brand = props => {
       dataIndex: 'operator',
       key: 'operator',
       render: (text, record) => [
-
-        <Space >
+        <Space>
           <a
             onClick={() => {
               editHandler(record);
             }}
           >
             编辑
-        </a>
-          <Popconfirm title="Sure to delete?" onConfirm={() => deleteHandler(record.id)}>
+          </a>
+          <Popconfirm
+            title="Sure to delete?"
+            onConfirm={() => deleteHandler(record.id)}
+          >
             <a>删除</a>
           </Popconfirm>
-        </Space>
+        </Space>,
       ],
     },
   ];
 
+  const [form] = Form.useForm();
+
+  // 使用hook
+  const [modalVisible, setModalVisible] = useState(false);
+  const [record, setRecord] = useState(undefined);
   // 表格修改数据事件
-  const editHandler = (record) => {
+  const editHandler = record => {
     setModalVisible(true);
+    // console.log(record);
     setRecord(record);
   };
 
   const addHandler = () => {
+    setRecord(undefined);
     setModalVisible(true);
   };
   // 表格删除数据事件
-  const deleteHandler = (id) => {
-    // console.log('key', id);
-    dispatch({ type: 'brand/deleteBrand', payload: { id, } });
-    dispatch({ type: 'brand/getBrandInfo', payload: { submitInfo: submitInfo } })
+  const deleteHandler = id => {
+    // 删除数据
+    dispatch({ type: 'brand/deleteBrand', payload: { id } });
+    // 重新查询数据
+    dispatch({
+      type: 'brand/getBrandInfo',
+      payload: { submitInfo: submitInfo },
+    });
   };
 
+  // 信息表单提交事件
+  const fromFinishHandler = values => {
+    let id = undefined;
+    if (record) {
+      id = record.id;
+    }
+    // 添加或者修改数据
+    dispatch({ type: 'brand/addOrEditBrand', payload: { id, values } });
+    // 重新查询数据
+    dispatch({
+      type: 'brand/getBrandInfo',
+      payload: { submitInfo: submitInfo },
+    });
+  };
 
-  const [form] = Form.useForm();
-  // 表单提交事件
-  const formFinish = values => {
+  // 查询表单提交事件
+  const searchFormFinish = values => {
     submitInfo.page = 1;
     submitInfo.size = 10;
     submitInfo.brandName = values.brandName;
@@ -104,32 +136,14 @@ const Brand = props => {
     submitInfo.page = page;
     submitInfo.size = pageSize;
     console.log('page onchange');
-    dispatch({ type: 'brand/getBrandInfo', payload: { submitInfo: submitInfo } })
+    dispatch({
+      type: 'brand/getBrandInfo',
+      payload: { submitInfo: submitInfo },
+    });
   };
-  // 使用hook 
-  const [modalVisible, setModalVisible] = useState(false);
-  const [record, setRecord] = useState(undefined);
 
-  useEffect(() => {
-    if (record === undefined) {
-      form.resetFields();
-    } else {
-      form.setFieldsValue({
-        ...record,
-        create_time: moment(record.create_time),
-        status: Boolean(record.status),
-      });
-    }
-  }, [visible]);
-
-  //modal 确认事件
-  const handleOk = () => {
-    setModalVisible(false);
-    console.log('handleOk');
-  };
-  // modal 取消事件
-  const handleCancel = () => {
-    console.log('Clicked cancel button');
+  // 修改modal的visible属性为false
+  const closeModal = () => {
     setModalVisible(false);
   };
 
@@ -139,17 +153,21 @@ const Brand = props => {
         <Row className="search_tip">
           <Col>查询条件</Col>
         </Row>
-        <Form form={form} onFinish={formFinish}>
+        <Form form={form} onFinish={searchFormFinish}>
           <Row>
             <Col span={6}>
-              <Form.Item label="品牌名称" name="brandName" >
+              <Form.Item label="品牌名称" name="brandName">
                 <Input style={{ width: '80%' }} />
               </Form.Item>
             </Col>
 
             <Col span={6}>
               <Form.Item label="状态" name="status">
-                <Select placeholder="请选择" allowClear style={{ width: '80%' }}>
+                <Select
+                  placeholder="请选择"
+                  allowClear
+                  style={{ width: '80%' }}
+                >
                   <Select.Option value="1">待确认</Select.Option>
                   <Select.Option value="2">成功</Select.Option>
                   <Select.Option value="3">失败</Select.Option>
@@ -170,7 +188,7 @@ const Brand = props => {
             <Col span={6}>
               <Button htmlType="button" onClick={addHandler}>
                 新增
-                </Button>
+              </Button>
             </Col>
           </Row>
         </Form>
@@ -189,35 +207,12 @@ const Brand = props => {
             }}
           />
         </div>
-        <Modal
-          title="信息"
-          visible={modalVisible}
-          onOk={handleOk}
-          onCancel={handleCancel}
-        >
-          <p>{JSON.stringify(record)}</p>
-          <Form 
-            {...layout}
-          >
-            <Form.Item label='品牌名称' name='name'>
-              <Input style={{ width: '80%' }} />
-            </Form.Item>
-            <Form.Item label='状态' name='status'>
-              <Select placeholder="请选择" allowClear style={{ width: '80%' }}>
-                <Select.Option value="1">待确认</Select.Option>
-                <Select.Option value="2">成功</Select.Option>
-                <Select.Option value="3">失败</Select.Option>
-                <Select.Option value="4">取消</Select.Option>
-              </Select>
-            </Form.Item>
-            <Form.Item label='操作者' name='operator_name'>
-              <Input style={{ width: '80%' }} />
-            </Form.Item>
-            <Form.Item label='操作时间' name='operate_time'>
-              <DatePicker style={{ width: '80%' }} />
-            </Form.Item>
-          </Form>
-        </Modal>
+        <BrandModal
+          modalVisible={modalVisible}
+          record={record}
+          closeModal={closeModal}
+          fromFinishHandler={fromFinishHandler}
+        ></BrandModal>
       </div>
     </BreadContent>
   );

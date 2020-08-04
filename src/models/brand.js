@@ -1,4 +1,9 @@
-import { initBrandService, getBrandService ,deleteBrandService} from '../services/brandService';
+import {
+  initBrandService,
+  getBrandService,
+  deleteBrandService,
+  addOrEditBrandService,
+} from '../services/brandService';
 
 export default {
   namespace: 'brand',
@@ -18,33 +23,39 @@ export default {
         ],
         total: 1,
         page: 1,
-        size: 10
+        size: 10,
       },
     },
   },
   effects: {
-    // *redirect({ payload }, { call, select, put }) {
-    //     const data = yield call(getBrand);
-    //     console.log(data);
-    //     payload.date = date;
-    //     yield put({ type: 'updateState', payload });
-    // },
+    // 初始化表格数据
     *initBrandInfo({ payload }, { call, select, put }) {
       const data = yield call(initBrandService);
       yield put({ type: 'updateState', payload: { data: data } });
     },
+    // 根据查询条件，更改数据源
     *getBrandInfo({ payload }, { call, select, put }) {
       // console.log('getBrandInfoByInfo');
       const data = yield call(getBrandService, payload.submitInfo);
       yield put({ type: 'updateState', payload: { data: data } });
     },
+    // 根据 id 删除数据
     *deleteBrand({ payload }, { call, select, put }) {
-      console.log('payload.id',payload.id);
+      // console.log('payload.id',payload.id);
       const data = yield call(deleteBrandService, payload.id);
-      
+    },
+    // 增加或修改数据
+    *addOrEditBrand({ payload }, { call, select, put }) {
+      console.log('addOrEditBrand', payload.values);
+      const data = yield call(
+        addOrEditBrandService,
+        payload.id,
+        payload.values,
+      );
     },
   },
   reducers: {
+    // 更新state
     updateState(state, { payload }) {
       console.log('reducers payload data', payload.data);
       return {
@@ -54,19 +65,15 @@ export default {
     },
   },
   subscriptions: {
+    // 当监听到pathname===/option时，执行初始化数据方法
     setup({ dispatch, history }) {
       history.listen(({ pathname }) => {
         if (pathname === '/option') {
           dispatch({
             type: 'initBrandInfo',
-            // payload: {
-            //     page: 1,
-            //     size: 10,
-            // }
           });
         }
       });
     },
-    
   },
 };

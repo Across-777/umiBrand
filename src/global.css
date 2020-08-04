@@ -7,7 +7,7 @@
     margin:10px 0;
 }
 .search_tip{
-    background: grey;
+    background: rgb(196, 195, 195);
     margin:0 0 10px 0;
 }
 .search_info{
@@ -32,7 +32,8 @@
 
 /* table component css */
 .table_txt{
-    background: rgb(21, 136, 182);
+    background: rgb(13, 101, 233);
+    color: aliceblue;
     /* padding: 5px; */
     /* margin-left: 2px; */
 }

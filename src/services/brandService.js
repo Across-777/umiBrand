@@ -8,28 +8,24 @@ export const initBrandService = async () => {
 // 根据条件查找表格数据
 export const getBrandService = async submitInfo => {
   console.log('submitInfo', submitInfo);
-  return request(
-    '/api/brand?' + qs.stringify(submitInfo),
-    {
-      method: 'GET',
-    });
+  return request('/api/brand?' + qs.stringify(submitInfo), {
+    method: 'GET',
+  });
 };
-
+// 根据id 删除数据
 export const deleteBrandService = async id => {
-  const bodyInfo = JSON.stringify(id)
-  return request(
-    '/api/brand?'+`id=${id}`,
-    {
-      method: 'DELETE',
-    });
+  const bodyInfo = JSON.stringify(id);
+  return request('/api/brand?' + `id=${id}`, {
+    method: 'DELETE',
+  });
 };
 
-export const editBrandService = async record => {
-  const bodyInfo = JSON.stringify(record)
-  return request(
-    '/api/brand',
-    {
-      method: 'PUT',
-      body: bodyInfo,
-    });
+// 增加或者修改数据
+export const addOrEditBrandService = async (id, values) => {
+  let data = { id, ...values };
+  const bodyInfo = JSON.stringify(data);
+  return request('/api/brand', {
+    method: 'POST',
+    body: bodyInfo,
+  });
 };

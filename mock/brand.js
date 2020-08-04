@@ -4,13 +4,13 @@ const brand = {
   total: 0,
   // totalPage: 0,
   page: 0,
-  size: 5
+  size: 5,
 };
 //处理返回数据
 const selectBrand = arg => {
   let count_num = 0;
   let start_num = (arg.page - 1) * arg.size + 1;
-  let end_num = arg.page * arg.size
+  let end_num = arg.page * arg.size;
   if (arg.brandName != undefined && arg.brandName != '') {
     if (arg.status != undefined) {
       for (let item in content) {
@@ -57,7 +57,7 @@ const selectBrand = arg => {
   brand.total = count_num;
   brand.size = arg.size;
   brand.page = arg.page;
-  console.log('arg', arg.status, arg.brandName, arg.page, arg.size);
+  // console.log('arg', arg.status, arg.brandName, arg.page, arg.size);
   console.log('total', brand.total);
 
   // for (let item in content) {
@@ -70,42 +70,49 @@ const delectBrand = id => {
     let obj = content[item];
     // console.log(item);
     if (obj.id == id) {
-      content.splice(item,1);
+      content.splice(item, 1);
       break;
     }
   }
-}
+};
+
+const addOrEditBrand = data => {
+  if (data.id == undefined) {
+    let id = content[content.length - 1].id + 1;
+    let item = { id, ...data };
+    content.push(item);
+  } else {
+    for (let item in content) {
+      let obj = content[item];
+      if (obj.id == data.id) {
+        content.splice(item, 1, data);
+        break;
+      }
+    }
+  }
+};
 export default {
   'GET /api/initbrand': (req, res) => {
-    console.log('initbrand');
+    // console.log('initbrand');
     brand.content = [];
     let arg = {
       page: 1,
-      size: 10
-    }
+      size: 10,
+    };
     selectBrand(arg);
     res.status(200).json(brand);
   },
   'GET /api/brand': (req, res) => {
-    console.log('req', req.query);
-    console.log('req.method', req.method);
+    // console.log('req', req.query);
+    // console.log('req.method', req.method);
     brand.content = [];
     selectBrand(req.query);
     res.status(200).json(brand);
   },
   'POST /api/brand': (req, res) => {
     const data = req.body;
-    if (!data || !data.id) {
-      res.status(400).json();
-      return;
-    }
-    const exists = users.find(p => p.id == data.id);
-    if (exists) {
-      exists = { ...data };
-    } else {
-      users.push(data);
-    }
-    res.status(200).json();
+    console.log(data);
+    addOrEditBrand(data);
   },
   'DELETE /api/brand': (req, res) => {
     // console.log('delete', req.query);
@@ -113,20 +120,17 @@ export default {
   },
 };
 
-
-
 function createContent(count, list = []) {
   for (let i = 1; i <= count; i++) {
-      let day =(i%30)<10? '0'+i%30: i%30
+    let day = i % 30 < 10 ? '0' + (i % 30) : i % 30;
     list.push({
       id: i,
       name: 'www' + i,
-      status: i % 4 + 1,
+      status: (i % 4) + 1,
       operator_name: 'operator' + i,
-      operate_time: '2020-07-'+ day ,
+      operate_time: '2020-07-' + day,
     });
   }
   return list;
 }
-const content = createContent(150)
-
+const content = createContent(150);

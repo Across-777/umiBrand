@@ -1,4 +1,4 @@
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Menu, Breadcrumb } from 'antd';
 import { Link } from 'umi';
 
 export default props => {

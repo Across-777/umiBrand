@@ -1,5 +1,5 @@
-import fetch from 'dva/fetch';
-// require("dva").fetch` instead of `require("dva/fetch")
+import { fetch } from 'dva';
+
 const checkStatus = response => {
   if (response.status == 200) return response;
   throw { message: 'error' };
@@ -16,12 +16,12 @@ const parseJson = response => {
     };
   });
 };
-const headers = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  };
+const headers = {
+  Accept: 'application/json',
+  'Content-Type': 'application/json',
+};
 export default (url, options) => {
-  return fetch(url,  {...options, headers})
+  return fetch(url, { ...options, headers })
     .then(checkStatus)
     .then(parseJson);
 };
