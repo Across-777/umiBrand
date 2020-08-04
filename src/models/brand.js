@@ -1,4 +1,4 @@
-import { initBrand, getBrand } from '../services/brandService';
+import { initBrandService, getBrandService ,deleteBrandService} from '../services/brandService';
 
 export default {
   namespace: 'brand',
@@ -30,14 +30,18 @@ export default {
     //     yield put({ type: 'updateState', payload });
     // },
     *initBrandInfo({ payload }, { call, select, put }) {
-      const data = yield call(initBrand);
-      // console.log(data);
+      const data = yield call(initBrandService);
       yield put({ type: 'updateState', payload: { data: data } });
     },
     *getBrandInfo({ payload }, { call, select, put }) {
       // console.log('getBrandInfoByInfo');
-      const data = yield call(getBrand, payload.submitInfo);
+      const data = yield call(getBrandService, payload.submitInfo);
       yield put({ type: 'updateState', payload: { data: data } });
+    },
+    *deleteBrand({ payload }, { call, select, put }) {
+      console.log('payload.id',payload.id);
+      const data = yield call(deleteBrandService, payload.id);
+      
     },
   },
   reducers: {
@@ -63,5 +67,6 @@ export default {
         }
       });
     },
+    
   },
 };

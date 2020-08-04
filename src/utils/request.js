@@ -16,8 +16,12 @@ const parseJson = response => {
     };
   });
 };
+const headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  };
 export default (url, options) => {
-  return fetch(url, options)
+  return fetch(url,  {...options, headers})
     .then(checkStatus)
     .then(parseJson);
 };

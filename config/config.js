@@ -3,6 +3,7 @@ export default {
     {
       path: '/',
       component: '@/layouts/BasicLayout',
+      // component: '@/layouts/TestB',
       routes: [
         { path: '/option', component: '@/pages/Brand/index' },
         { path: '/option2', component: '@/pages/Brand/components/option2' },

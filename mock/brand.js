@@ -54,29 +54,41 @@ const selectBrand = arg => {
       }
     }
   }
-  brand.total=count_num;
-  brand.size=arg.size;
-  brand.page=arg.page;
+  brand.total = count_num;
+  brand.size = arg.size;
+  brand.page = arg.page;
   console.log('arg', arg.status, arg.brandName, arg.page, arg.size);
-  console.log('total',brand.total);
-  
+  console.log('total', brand.total);
+
   // for (let item in content) {
   //     console.log(content[item]);
   // }
 };
+
+const delectBrand = id => {
+  for (let item in content) {
+    let obj = content[item];
+    // console.log(item);
+    if (obj.id == id) {
+      content.splice(item,1);
+      break;
+    }
+  }
+}
 export default {
   'GET /api/initbrand': (req, res) => {
     console.log('initbrand');
     brand.content = [];
-    let arg={
-      page:1,
-      size:10
+    let arg = {
+      page: 1,
+      size: 10
     }
     selectBrand(arg);
     res.status(200).json(brand);
   },
   'GET /api/brand': (req, res) => {
     console.log('req', req.query);
+    console.log('req.method', req.method);
     brand.content = [];
     selectBrand(req.query);
     res.status(200).json(brand);
@@ -96,20 +108,8 @@ export default {
     res.status(200).json();
   },
   'DELETE /api/brand': (req, res) => {
-    const data = req.body;
-    if (!data || !data.id) {
-      res.status(400).json();
-      return;
-    }
-    const exists = users.findIndex(p => p.id == data.id);
-    if (exists && exists >= 0) {
-      users.splice(exists, 1);
-    } else {
-      res.status(200).json();
-    }
-
-    console.log(users);
-    res.status(200).json();
+    // console.log('delete', req.query);
+    delectBrand(req.query.id);
   },
 };
 
@@ -117,15 +117,16 @@ export default {
 
 function createContent(count, list = []) {
   for (let i = 1; i <= count; i++) {
+      let day =(i%30)<10? '0'+i%30: i%30
     list.push({
       id: i,
       name: 'www' + i,
-      status: i%4+1,
+      status: i % 4 + 1,
       operator_name: 'operator' + i,
-      operate_time: '2020-07-30 '+i%24+':00:00',
+      operate_time: '2020-07-'+ day ,
     });
   }
   return list;
 }
-const content =createContent(150)
+const content = createContent(150)
 
